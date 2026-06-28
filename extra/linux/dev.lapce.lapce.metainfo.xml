@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>dev.super-ide.super-ide</id>
+    <name>SUPER IDE</name>
+    <developer_name>SUPER IDE Contributors</developer_name>
+    <summary>Lightweight desktop IDE with built-in AI features that stay dormant until needed</summary>
+    <metadata_license>MIT</metadata_license>
+    <project_license>Apache-2.0</project_license>
+    <url type="homepage">https://superide.dev</url>
+    <url type="bugtracker">https://github.com/super-ide/super-ide/issues</url>
+    <categories>
+        <category>IDE</category>
+        <category>Development</category>
+    </categories>
+    <description>
+        <p>
+            SUPER IDE is a lightweight desktop IDE built on Rust. It combines a fast, native editor
+            with VS Code-like workflows, modern orange branding, and built-in AI features that stay
+            dormant until you explicitly open chat or provider settings.
+        </p>
+        <p>Features:</p>
+        <ul>
+            <li>Fast startup and low RAM usage</li>
+            <li>Modal editing (Vim-like) support as a first class citizen</li>
+            <li>Built-in LSP (Language Server Protocol) support</li>
+            <li>Built-in remote development support</li>
+            <li>Plugin system using WASI</li>
+            <li>Built-in terminal</li>
+            <li>AI chat, agent mode, and multi-provider support (lazy-loaded)</li>
+        </ul>
+    </description>
+    <content_rating type="oars-1.1" />
+    <launchable type="desktop-id">dev.super-ide.super-ide.desktop</launchable>
+    <releases>
+        <release version="0.1.0" date="2026-06-25">
+            <url type="details">https://github.com/super-ide/super-ide/releases/tag/v0.1.0</url>
+        </release>
+    </releases>
+</component>
