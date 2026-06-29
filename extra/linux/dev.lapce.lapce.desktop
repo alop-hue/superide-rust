@@ -1,0 +1,20 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=SUPER IDE
+Comment=Lightweight desktop IDE with built-in AI
+Categories=Development;IDE;
+GenericName=Code Editor
+StartupWMClass=super-ide
+
+Icon=dev.super-ide.super-ide
+Exec=super-ide %F
+Terminal=false
+MimeType=text/plain;inode/directory;
+Actions=new-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=super-ide --new %F
+Icon=dev.super-ide.super-ide
