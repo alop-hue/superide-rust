@@ -1,0 +1,213 @@
+#:schema ../extra/schemas/color-theme.json
+
+[color-theme]
+name = "SUPER Orange Dark"
+
+[ui]
+font-family = ""
+font-size = 13
+header-height = 36
+status-height = 25
+tab-min-width = 100
+activity-width = 50
+scroll-width = 10
+drop-shadow-width = 0
+
+[color-theme.base]
+black = "#0A0A0A"
+blue = "#3B82F6"
+cyan = "#56B6C2"
+green = "#22C55E"
+grey = "#2A2A2E"
+magenta = "#A855F7"
+orange = "#F97316"
+purple = "#A855F7"
+red = "#EF4444"
+white = "#FAFAFA"
+yellow = "#F59E0B"
+
+primary-background = "#0A0A0A"
+secondary-background = "#111111"
+tertiary-background = "#18181B"
+panel-background = "#1C1C1F"
+current-background = "#27272A"
+text = "#FAFAFA"
+dim-text = "#A1A1AA"
+muted-text = "#71717A"
+border = "#2A2A2E"
+border-soft = "#202024"
+
+[color-theme.syntax]
+"comment" = "$muted-text"
+"constant" = "$yellow"
+"type" = "$yellow"
+"typeAlias" = "$yellow"
+"number" = "$yellow"
+"enum" = "$yellow"
+"struct" = "$yellow"
+"structure" = "$yellow"
+"interface" = "$yellow"
+"attribute" = "$yellow"
+"constructor" = "$yellow"
+"function" = "$blue"
+"method" = "$blue"
+"function.method" = "$blue"
+"keyword" = "$purple"
+"selfKeyword" = "$purple"
+"field" = "$red"
+"property" = "$red"
+"enumMember" = "$red"
+"enum-member" = "$red"
+"string" = "$green"
+"type.builtin" = "$cyan"
+"builtinType" = "$cyan"
+"escape" = "$cyan"
+"string.escape" = "$cyan"
+"embedded" = "$cyan"
+"punctuation.delimiter" = "$orange"
+"text.title" = "$orange"
+"text.uri" = "$blue"
+"text.reference" = "$yellow"
+"variable" = "$red"
+"variable.other.member" = "$red"
+"tag" = "$blue"
+
+"markup.heading" = "$orange"
+"markup.bold" = "$orange"
+"markup.italic" = "$orange"
+"markup.list" = "$orange"
+"markup.link.url" = "$blue"
+"markup.link.label" = "$purple"
+"markup.link.text" = "$purple"
+
+"bracket.color.1" = "$blue"
+"bracket.color.2" = "$yellow"
+"bracket.color.3" = "$purple"
+"bracket.unpaired" = "$red"
+
+[color-theme.ui]
+"lapce.error" = "$red"
+"lapce.warn" = "$yellow"
+"lapce.dropdown_shadow" = "#000000"
+"lapce.border" = "$border"
+"lapce.scroll_bar" = "#3F3F46BB"
+
+"lapce.button.primary.background" = "$orange"
+"lapce.button.primary.foreground" = "$white"
+
+"lapce.tab.active.background" = "$primary-background"
+"lapce.tab.active.foreground" = "$text"
+"lapce.tab.active.underline" = "$orange"
+
+"lapce.tab.inactive.background" = "$secondary-background"
+"lapce.tab.inactive.foreground" = "$dim-text"
+"lapce.tab.inactive.underline" = "#F9731655"
+
+"lapce.tab.separator" = "$border-soft"
+
+"lapce.icon.active" = "$text"
+"lapce.icon.inactive" = "$dim-text"
+
+"lapce.remote.icon" = "$black"
+"lapce.remote.local" = "$blue"
+"lapce.remote.connected" = "$green"
+"lapce.remote.connecting" = "$yellow"
+"lapce.remote.disconnected" = "$red"
+
+"lapce.plugin.name" = "$text"
+"lapce.plugin.description" = "$dim-text"
+"lapce.plugin.author" = "$muted-text"
+
+"editor.background" = "$primary-background"
+"editor.foreground" = "$text"
+"editor.dim" = "$dim-text"
+"editor.focus" = "$white"
+"editor.caret" = "$orange"
+"editor.selection" = "#F9731635"
+"editor.current_line" = "$tertiary-background"
+"editor.debug_break_line" = "#3B82F630"
+"editor.link" = "$blue"
+"editor.visible_whitespace" = "$grey"
+"editor.indent_guide" = "$grey"
+"editor.drag_drop_background" = "#F9731644"
+"editor.drag_drop_tab_background" = "#11111144"
+"editor.sticky_header_background" = "$primary-background"
+
+"inlay_hint.foreground" = "$dim-text"
+"inlay_hint.background" = "#F9731618"
+
+"error_lens.error.foreground" = "$red"
+"error_lens.error.background" = "#EF444418"
+"error_lens.warning.foreground" = "$yellow"
+"error_lens.warning.background" = "#F59E0B18"
+"error_lens.other.foreground" = "$muted-text"
+"error_lens.other.background" = "#71717A18"
+
+"completion_lens.foreground" = "$muted-text"
+
+"source_control.added" = "#22C55ECC"
+"source_control.removed" = "#EF4444CC"
+"source_control.modified" = "#3B82F6CC"
+
+"tooltip.background" = "$panel-background"
+"tooltip.foreground" = "$text"
+
+"palette.background" = "$panel-background"
+"palette.foreground" = "$text"
+"palette.current.background" = "$current-background"
+"palette.current.foreground" = "$text"
+
+"completion.background" = "$panel-background"
+"completion.current" = "$current-background"
+
+"hover.background" = "$panel-background"
+
+"activity.background" = "#0D0D0F"
+"activity.current" = "$primary-background"
+
+"debug.breakpoint" = "$red"
+"debug.breakpoint.hover" = "#EF444455"
+
+"panel.background" = "$secondary-background"
+"panel.foreground" = "$text"
+"panel.foreground.dim" = "$dim-text"
+"panel.current.background" = "$current-background"
+"panel.current.foreground" = "$text"
+"panel.current.foreground.dim" = "$dim-text"
+"panel.hovered.background" = "#27272A"
+"panel.hovered.active.background" = "#F9731620"
+"panel.hovered.foreground" = "$text"
+"panel.hovered.foreground.dim" = "$dim-text"
+
+"status.background" = "$secondary-background"
+"status.foreground" = "$text"
+"status.modal.normal.background" = "$orange"
+"status.modal.normal.foreground" = "$black"
+"status.modal.insert.background" = "$green"
+"status.modal.insert.foreground" = "$black"
+"status.modal.visual.background" = "$blue"
+"status.modal.visual.foreground" = "$black"
+"status.modal.terminal.background" = "$purple"
+"status.modal.terminal.foreground" = "$black"
+
+"markdown.blockquote" = "$muted-text"
+
+"terminal.cursor" = "$orange"
+"terminal.foreground" = "$text"
+"terminal.background" = "$primary-background"
+"terminal.white" = "$white"
+"terminal.black" = "$black"
+"terminal.red" = "$red"
+"terminal.blue" = "$blue"
+"terminal.green" = "$green"
+"terminal.yellow" = "$yellow"
+"terminal.cyan" = "$cyan"
+"terminal.magenta" = "$magenta"
+"terminal.bright_white" = "#FFFFFF"
+"terminal.bright_red" = "$red"
+"terminal.bright_blue" = "$blue"
+"terminal.bright_green" = "$green"
+"terminal.bright_yellow" = "$yellow"
+"terminal.bright_cyan" = "$cyan"
+"terminal.bright_magenta" = "$magenta"
+"terminal.bright_black" = "#3F3F46"

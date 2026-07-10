@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUPER IDE — The AI-Native IDE That Thinks With You</title>
+  <meta name="description" content="SUPER IDE is a next-generation, open-source code editor built in Rust with deep AI integration for chat, edit, plan, review, debug, and research modes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- ─── 3D Canvas Background ─── -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- ─── Navbar ─── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">SUPER</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#ai">AI Modes</a>
+        <a href="#themes">Themes</a>
+        <a href="docs/" target="_blank">Docs</a>
+        <a href="https://github.com" target="_blank" class="nav-gh">GitHub</a>
+      </div>
+      <a href="#download" class="nav-cta">Get Started</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── Hero ─── -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-shapes">
+      <div class="shape s1"></div><div class="shape s2"></div>
+    </div>
+    <div class="hero-content" data-tilt>
+      <div class="hero-badge" data-reveal>v0.4.6 — Open Source</div>
+      <h1 data-reveal>
+        Code at the <span class="gradient-text">Speed of Thought</span>
+      </h1>
+      <p class="hero-sub" data-reveal>
+        SUPER IDE is the open-source, AI-native code editor built in Rust.
+        It doesn't just complete your code — it understands your project,
+        plans your changes, and evolves with you.
+      </p>
+      <div class="hero-actions" data-reveal>
+        <a href="#download" class="btn-primary">Download Now</a>
+        <a href="docs/" class="btn-secondary">Documentation</a>
+      </div>
+      <div class="hero-metrics" data-reveal>
+        <div class="metric"><span class="metric-num">100%</span><span class="metric-label">Rust</span></div>
+        <div class="metric"><span class="metric-num">6</span><span class="metric-label">AI Modes</span></div>
+        <div class="metric"><span class="metric-num">Open</span><span class="metric-label">Source</span></div>
+      </div>
+    </div>
+    <div class="hero-scroll" id="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-arrow">↓</div>
+    </div>
+  </section>
+
+  <!-- ─── Features ─── -->
+  <section class="features" id="features">
+    <div class="section-header" data-reveal>
+      <span class="section-tag">Features</span>
+      <h2>Built for the <span class="gradient-text">Next Generation</span></h2>
+      <p>Every feature is designed for one purpose — to make you faster and more creative.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-reveal data-tilt>
+        <div class="fc-icon">⚡</div>
+        <h3>Blazing Rust Performance</h3>
+        <p>Built from the ground up in Rust. Instant startup, minimal memory, no lag — even in massive monorepos.</p>
+      </div>
+      <div class="feature-card" data-reveal data-tilt>
+        <div class="fc-icon">🧠</div>
+        <h3>Deep AI Integration</h3>
+        <p>Not just autocomplete. Chat, edit, plan, review, debug, and research modes that understand your entire project.</p>
+      </div>
+      <div class="feature-card" data-reveal data-tilt>
+        <div class="fc-icon">🎨</div>
+        <h3>Beautiful Custom Themes</h3>
+        <p>From dynamic gradients to neon glow. Every pixel is yours to customize with a powerful theming engine.</p>
+      </div>
+      <div class="feature-card" data-reveal data-tilt>
+        <div class="fc-icon">🔌</div>
+        <h3>Multi-Provider AI</h3>
+        <p>OpenAI, Anthropic, OpenRouter, Ollama, DeepSeek, Qwen, Grok & more. All configurable from one settings panel.</p>
+      </div>
+      <div class="feature-card" data-reveal data-tilt>
+        <div class="fc-icon">🛠️</div>
+        <h3>Agent Tool System</h3>
+        <p>Your AI can read files, search code, edit text, run terminal commands, and browse the web — all autonomously.</p>
+      </div>
+      <div class="feature-card" data-reveal data-tilt>
+        <div class="fc-icon">🌐</div>
+        <h3>Cross-Platform</h3>
+        <p>Native on Linux, macOS, and Windows. One codebase, flawless experience everywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── AI Modes ─── -->
+  <section class="ai-modes" id="ai">
+    <div class="section-header" data-reveal>
+      <span class="section-tag">AI Modes</span>
+      <h2>Six Minds, <span class="gradient-text">One Editor</span></h2>
+      <p>Each mode is a specialized AI personality tuned for a specific task.</p>
+    </div>
+    <div class="modes-grid">
+      <div class="mode-card" data-reveal style="--accent:#22C55E">
+        <div class="mode-icon">💬</div>
+        <h3>Chat</h3>
+        <p>General-purpose AI conversation. Ask questions, get explanations, explore ideas.</p>
+      </div>
+      <div class="mode-card" data-reveal style="--accent:#F97316">
+        <div class="mode-icon">✏️</div>
+        <h3>Edit</h3>
+        <p>Describe the change and the agent reads your project, plans the edit, and applies it.</p>
+      </div>
+      <div class="mode-card" data-reveal style="--accent:#A855F7">
+        <div class="mode-icon">📋</div>
+        <h3>Plan</h3>
+        <p>Analyzes your codebase and generates a step-by-step plan before writing any code.</p>
+      </div>
+      <div class="mode-card" data-reveal style="--accent:#3B82F6">
+        <div class="mode-icon">🔍</div>
+        <h3>Review</h3>
+        <p>Reads your code, identifies issues, and suggests improvements with explanations.</p>
+      </div>
+      <div class="mode-card" data-reveal style="--accent:#EF4444">
+        <div class="mode-icon">🐛</div>
+        <h3>Debug</h3>
+        <p>Reads error context, runs diagnostics, and searches for known solutions — automatically.</p>
+      </div>
+      <div class="mode-card" data-reveal style="--accent:#F97316">
+        <div class="mode-icon">📚</div>
+        <h3>Research</h3>
+        <p>Searches your workspace and external sources to answer deep technical questions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Theme Preview ─── -->
+  <section class="themes" id="themes">
+    <div class="section-header" data-reveal>
+      <span class="section-tag">Themes</span>
+      <h2>See It in <span class="gradient-text">Action</span></h2>
+      <p>Two brand-new themes designed for the SUPER IDE identity.</p>
+    </div>
+    <div class="theme-showcase" data-reveal>
+      <div class="theme-tab-bar">
+        <button class="theme-tab active" data-theme="gradient">Orange Gradient</button>
+        <button class="theme-tab" data-theme="neon">Orange Neon</button>
+      </div>
+      <div class="theme-preview" id="theme-preview">
+        <div class="preview-editor">
+          <div class="preview-header">
+            <span class="preview-dot red"></span>
+            <span class="preview-dot yellow"></span>
+            <span class="preview-dot green"></span>
+            <span class="preview-filename">agent.rs</span>
+          </div>
+          <div class="preview-body gradient-theme" id="preview-body">
+            <pre><span class="kw">use</span> <span class="mod">superide_ai</span>::<span class="mod">providers</span>::<span class="fnc">{</span></pre>
+            <pre><span class="kw">  </span><span class="fnc">OpenAIProvider</span><span class="op">,</span></pre>
+            <pre><span class="kw">  </span><span class="fnc">AnthropicProvider</span><span class="op">,</span></pre>
+            <pre><span class="kw">  </span><span class="fnc">OpenRouterProvider</span><span class="op">,</span></pre>
+            <pre><span class="kw">  </span><span class="fnc">OllamaProvider</span><span class="op">,</span></pre>
+            <pre><span class="kw">}</span><span class="op">;</span></pre>
+            <pre><span class="ln">10</span><span class="kw"> </span></pre>
+            <pre><span class="ln">11</span><span class="kw">fn</span> <span class="fnc">chat_panel</span>() {</pre>
+            <pre><span class="ln">12</span>    <span class="kw">let</span> provider <span class="op">=</span> <span class="fnc">Arc::new</span>(<span class="fnc">ProviderService::new</span>());</pre>
+            <pre><span class="ln">13</span>    provider<span class="op">.</span><span class="fnc">register</span>(<span class="str">"openai"</span>, <span class="fnc">Box::new</span>(<span class="fnc">OpenAIProvider::new</span>()));</pre>
+            <pre><span class="ln">14</span>    provider<span class="op">.</span><span class="fnc">register</span>(<span class="str">"anthropic"</span>, <span class="fnc">Box::new</span>(<span class="fnc">AnthropicProvider::new</span>()));</pre>
+            <pre><span class="ln">15</span>    provider<span class="op">.</span><span class="fnc">register</span>(<span class="str">"deepseek"</span>, <span class="fnc">Box::new</span>(<span class="fnc">DeepSeekProvider::new</span>()));</pre>
+            <pre><span class="ln">16</span>    provider<span class="op">.</span><span class="fnc">register</span>(<span class="str">"qwen"</span>,     <span class="fnc">Box::new</span>(<span class="fnc">QwenProvider::new</span>()));</pre>
+            <pre><span class="ln">17</span>    provider<span class="op">.</span><span class="fnc">register</span>(<span class="str">"grok"</span>,     <span class="fnc">Box::new</span>(<span class="fnc">GrokProvider::new</span>()));</pre>
+            <pre><span class="ln">18</span>}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Download ─── -->
+  <section class="download" id="download">
+    <div class="section-header" data-reveal>
+      <span class="section-tag">Get Started</span>
+      <h2>Ready to <span class="gradient-text">Supercharge</span> Your Workflow?</h2>
+      <p>Open source, MIT licensed. Download the latest release for your platform.</p>
+    </div>
+    <div class="download-cards" data-reveal>
+      <div class="dl-card" data-tilt>
+        <div class="dl-os">🐧</div>
+        <h3>Linux</h3>
+        <p>AppImage & .deb</p>
+        <a href="#" class="btn-primary sm">Download</a>
+      </div>
+      <div class="dl-card" data-tilt>
+        <div class="dl-os">🍎</div>
+        <h3>macOS</h3>
+        <p>Apple Silicon & Intel</p>
+        <a href="#" class="btn-primary sm">Download</a>
+      </div>
+      <div class="dl-card" data-tilt>
+        <div class="dl-os">⊞</div>
+        <h3>Windows</h3>
+        <p>Installer & portable</p>
+        <a href="#" class="btn-primary sm">Download</a>
+      </div>
+      <div class="dl-card" data-tilt>
+        <div class="dl-os">📦</div>
+        <h3>Build from Source</h3>
+        <p>Rust nightly required</p>
+        <a href="docs/building-from-source" class="btn-secondary sm">Guide</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">SUPER IDE</span>
+        <p>Open source, MIT licensed. Made with ❤️ and Rust.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#ai">AI Modes</a>
+          <a href="#themes">Themes</a>
+          <a href="#download">Download</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="docs/">Documentation</a>
+          <a href="docs/building-from-source">Build Guide</a>
+          <a href="https://github.com">GitHub</a>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <a href="#">Discord</a>
+          <a href="#">Twitter / X</a>
+          <a href="#">Bluesky</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUPER IDE. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ─── Three.js ─── -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

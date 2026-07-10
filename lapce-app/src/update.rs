@@ -1,0 +1,250 @@
+use std::path::{Path, PathBuf};
+
+use anyhow::{Result, anyhow};
+use lapce_core::{directory::Directory, meta};
+use serde::Deserialize;
+
+#[derive(Clone, Deserialize, Debug)]
+pub struct ReleaseInfo {
+    pub tag_name: String,
+    pub target_commitish: String,
+    pub assets: Vec<ReleaseAsset>,
+    #[serde(skip)]
+    pub version: String,
+}
+
+#[derive(Clone, Deserialize, Debug)]
+pub struct ReleaseAsset {
+    pub name: String,
+    pub browser_download_url: String,
+}
+
+pub fn get_latest_release() -> Result<ReleaseInfo> {
+    let url = match meta::RELEASE {
+        meta::ReleaseType::Debug => {
+            return Err(anyhow!("no release for debug"));
+        }
+        meta::ReleaseType::Nightly => {
+            "https://api.github.com/repos/alop-hue/superide-rust/releases/tags/nightly"
+        }
+        _ => "https://api.github.com/repos/alop-hue/superide-rust/releases/latest",
+    };
+
+    let resp = lapce_proxy::get_url(url, Some("SUPER-IDE"))?;
+    if !resp.status().is_success() {
+        return Err(anyhow!("get release info failed {}", resp.text()?));
+    }
+    let mut release: ReleaseInfo = serde_json::from_str(&resp.text()?)?;
+
+    release.version = match release.tag_name.as_str() {
+        "nightly" => format!(
+            "{}+Nightly.{}",
+            env!("CARGO_PKG_VERSION"),
+            &release.target_commitish[..7]
+        ),
+        _ => release
+            .tag_name
+            .strip_prefix('v')
+            .unwrap_or(&release.tag_name)
+            .to_owned(),
+    };
+
+    Ok(release)
+}
+
+pub fn download_release(release: &ReleaseInfo) -> Result<PathBuf> {
+    let dir =
+        Directory::updates_directory().ok_or_else(|| anyhow!("no directory"))?;
+    let name = match std::env::consts::OS {
+        "macos" => "SUPER-IDE-macos.dmg",
+        "linux" => match std::env::consts::ARCH {
+            "aarch64" => "super-ide-linux-arm64.tar.gz",
+            "x86_64" => "super-ide-linux-amd64.tar.gz",
+            _ => return Err(anyhow!("arch not supported")),
+        },
+        #[cfg(feature = "portable")]
+        "windows" => "SUPER-IDE-windows-portable.zip",
+        #[cfg(not(feature = "portable"))]
+        "windows" => "SUPER-IDE-windows.msi",
+        _ => return Err(anyhow!("os not supported")),
+    };
+    let file_path = dir.join(name);
+
+    for asset in &release.assets {
+        if asset.name == name {
+            let mut resp = lapce_proxy::get_url(&asset.browser_download_url, None)?;
+            if !resp.status().is_success() {
+                return Err(anyhow!("download file error {}", resp.text()?));
+            }
+            let mut out = std::fs::File::create(&file_path)?;
+            resp.copy_to(&mut out)?;
+            return Ok(file_path);
+        }
+    }
+
+    Err(anyhow!("can't download release"))
+}
+
+#[cfg(target_os = "macos")]
+pub fn extract(src: &Path, process_path: &Path) -> Result<PathBuf> {
+    let info = dmg::Attach::new(src).with()?;
+    let dest = process_path.parent().ok_or_else(|| anyhow!("no parent"))?;
+    let dest = if dest.file_name().and_then(|s| s.to_str()) == Some("MacOS") {
+        dest.parent().unwrap().parent().unwrap().parent().unwrap()
+    } else {
+        dest
+    };
+    // Remove either app bundle
+    let _ = std::fs::remove_dir_all(dest.join("SUPER IDE.app"));
+    let _ = std::fs::remove_dir_all(dest.join("Lapce.app"));
+    let src_bundle = if info.mount_point.join("SUPER IDE.app").exists() {
+        info.mount_point.join("SUPER IDE.app")
+    } else {
+        info.mount_point.join("Lapce.app")
+    };
+    fs_extra::copy_items(
+        &[src_bundle],
+        dest,
+        &fs_extra::dir::CopyOptions {
+            overwrite: true,
+            skip_exist: false,
+            buffer_size: 64000,
+            copy_inside: true,
+            content_only: false,
+            depth: 0,
+        },
+    )?;
+    let dest_bundle = dest.join(
+        if src_bundle.ends_with("SUPER IDE.app") { "SUPER IDE.app" } else { "Lapce.app" }
+    );
+    Ok(dest_bundle)
+}
+
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "openbsd"))]
+pub fn extract(src: &Path, process_path: &Path) -> Result<PathBuf> {
+    let tar_gz = std::fs::File::open(src)?;
+    let tar = flate2::read::GzDecoder::new(tar_gz);
+    let mut archive = tar::Archive::new(tar);
+    let parent = src.parent().ok_or_else(|| anyhow::anyhow!("no parent"))?;
+    archive.unpack(parent)?;
+    std::fs::remove_file(process_path)?;
+    // Try super-ide first, then Lapce (legacy)
+    let binary = parent.join("super-ide").join("super-ide");
+    let lapce_binary = parent.join("Lapce").join("lapce");
+    let src_binary = if binary.exists() { binary } else { lapce_binary };
+    std::fs::copy(src_binary, process_path)?;
+    Ok(process_path.to_path_buf())
+}
+
+#[cfg(all(target_os = "windows", feature = "portable"))]
+pub fn extract(src: &Path, process_path: &Path) -> Result<PathBuf> {
+    let parent = src
+        .parent()
+        .ok_or_else(|| anyhow::anyhow!("src has no parent"))?;
+    let dst_parent = process_path
+        .parent()
+        .ok_or_else(|| anyhow::anyhow!("process_path has no parent"))?;
+
+    {
+        let mut archive = zip::ZipArchive::new(std::fs::File::open(src)?)?;
+        archive.extract(parent)?;
+    }
+
+    let backup_name = format!("{}.bak", process_path.file_name().unwrap_or_default().to_string_lossy());
+    std::fs::rename(process_path, dst_parent.join(&backup_name))?;
+    // Try super-ide.exe then lapce.exe
+    let exe = parent.join("super-ide.exe");
+    let lapce_exe = parent.join("lapce.exe");
+    let src_exe = if exe.exists() { exe } else { lapce_exe };
+    std::fs::copy(src_exe, process_path)?;
+
+    Ok(process_path.to_path_buf())
+}
+
+#[cfg(all(target_os = "windows", not(feature = "portable")))]
+pub fn extract(src: &Path, _process_path: &Path) -> Result<PathBuf> {
+    // We downloaded an uncompressed msi installer, nothing to extract.
+    // On the other hand, we need to run this msi so pass its path back out.
+    Ok(src.to_path_buf())
+}
+
+#[cfg(target_os = "macos")]
+pub fn restart(path: &Path) -> Result<()> {
+    use std::os::unix::process::CommandExt;
+    let _ = std::process::Command::new("open")
+        .arg("-n")
+        .arg(path)
+        .arg("--args")
+        .arg("-n")
+        .exec();
+    Ok(())
+}
+
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "openbsd"))]
+pub fn restart(path: &Path) -> Result<()> {
+    use std::os::unix::process::CommandExt;
+    let _ = std::process::Command::new(path).arg("-n").exec();
+    Ok(())
+}
+
+#[cfg(all(target_os = "windows", feature = "portable"))]
+pub fn restart(path: &Path) -> Result<()> {
+    use std::os::windows::process::CommandExt;
+    const DETACHED_PROCESS: u32 = 0x00000008;
+    let process_id = std::process::id();
+    let path = path
+        .to_str()
+        .ok_or_else(|| anyhow!("can't get path to str"))?;
+    std::process::Command::new("cmd")
+        .raw_arg(format!(
+            r#"/C taskkill /PID {process_id} & start "" "{path}""#
+        ))
+        .creation_flags(DETACHED_PROCESS)
+        .spawn()?;
+    Ok(())
+}
+
+#[cfg(all(target_os = "windows", not(feature = "portable")))]
+pub fn restart(path: &Path) -> Result<()> {
+    use std::os::windows::process::CommandExt;
+    const DETACHED_PROCESS: u32 = 0x00000008;
+    let process_id = std::process::id();
+    let path = path
+        .to_str()
+        .ok_or_else(|| anyhow!("can't get path to str"))?;
+
+    let current_exe = std::env::current_exe()
+        .map_err(|err| anyhow!("can't get path to exe").context(err))?;
+    let current_exe = current_exe
+        .to_str()
+        .ok_or_else(|| anyhow!("can't convert exe path to str"))?;
+
+    std::process::Command::new("cmd")
+        .raw_arg(format!(
+            r#"/C taskkill /PID {process_id} & msiexec /i "{path}" /qb & start "" "{current_exe}""#,
+        ))
+        .creation_flags(DETACHED_PROCESS)
+        .spawn()?;
+    Ok(())
+}
+
+#[cfg(all(target_os = "windows", feature = "portable"))]
+pub fn cleanup() {
+    if let Ok(process_path) = std::env::current_exe() {
+        if let Some(dst_parent) = process_path.parent() {
+            let backup_name = format!("{}.bak", process_path.file_name().unwrap_or_default().to_string_lossy());
+            if let Err(err) = std::fs::remove_file(dst_parent.join(&backup_name))
+            {
+                tracing::error!("{:?}", err);
+            }
+        }
+    }
+}
+
+#[cfg(any(
+    not(target_os = "windows"),
+    all(target_os = "windows", not(feature = "portable"))
+))]
+pub fn cleanup() {
+    // Nothing to do yet
+}
