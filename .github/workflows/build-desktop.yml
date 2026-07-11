@@ -1,0 +1,70 @@
+name: Build Desktop
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+
+jobs:
+  build:
+    name: SUPER IDE (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies on Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+        run: sudo make ubuntu-deps
+
+      - name: Update toolchain
+        run: rustup update --no-self-update
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Fetch dependencies
+        run: cargo fetch --locked
+
+      - name: Build
+        run: cargo build --release --frozen
+
+      - name: Upload binary (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        uses: actions/upload-artifact@v4
+        with:
+          name: superide-linux
+          path: target/release/superide
+          retention-days: 7
+
+      - name: Upload binary (macOS)
+        if: startsWith(matrix.os, 'macos')
+        uses: actions/upload-artifact@v4
+        with:
+          name: superide-macos
+          path: target/release/superide
+          retention-days: 7
+
+      - name: Upload binary (Windows)
+        if: startsWith(matrix.os, 'windows')
+        uses: actions/upload-artifact@v4
+        with:
+          name: superide-windows
+          path: target/release/superide.exe
+          retention-days: 7
