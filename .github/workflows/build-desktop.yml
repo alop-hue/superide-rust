@@ -27,7 +27,7 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install dependencies on Ubuntu
         if: startsWith(matrix.os, 'ubuntu')
@@ -47,7 +47,7 @@ jobs:
 
       - name: Upload binary (Linux)
         if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: superide-linux
           path: target/release/superide
@@ -55,7 +55,7 @@ jobs:
 
       - name: Upload binary (macOS)
         if: startsWith(matrix.os, 'macos')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: superide-macos
           path: target/release/superide
@@ -63,7 +63,7 @@ jobs:
 
       - name: Upload binary (Windows)
         if: startsWith(matrix.os, 'windows')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: superide-windows
           path: target/release/superide.exe
